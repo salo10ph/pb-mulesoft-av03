@@ -2,16 +2,26 @@ package pb.mulesoft.estados.controller.form;
 
 import java.math.BigDecimal;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
 import pb.mulesoft.estados.modelo.Estado;
 import pb.mulesoft.estados.modelo.Regiao;
 import pb.mulesoft.estados.repository.EstadoRepository;
 
 public class EstadoForm {
 	
+	@NotBlank @Length(min = 2)
 	private String nome;
 	private Regiao regiao;
+	@NotNull
 	private Long populacao;
+	@NotBlank @Length(min = 2)
 	private String capital;
+	@NotNull
 	private BigDecimal area;
 	
 	public EstadoForm(String nome, Regiao regiao, Long populacao, String capital, BigDecimal area) {

@@ -3,7 +3,7 @@ package pb.mulesoft.estados.controller;
 import java.net.URI;
 import java.util.Optional;
 
-import javax.websocket.server.PathParam;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -54,7 +53,7 @@ public class EstadosController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<EstadoDto> inserir(@RequestBody EstadoForm form, UriComponentsBuilder uriBuilder){
+	public ResponseEntity<EstadoDto> inserir(@RequestBody @Valid EstadoForm form, UriComponentsBuilder uriBuilder){
 		Estado estado = form.converter();
 		estadoRepository.save(estado);
 		
@@ -64,7 +63,7 @@ public class EstadosController {
 	
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<?> alterar(@PathVariable Long id, @RequestBody EstadoForm form, UriComponentsBuilder uriBuilder){
+	public ResponseEntity<?> alterar(@PathVariable Long id, @RequestBody @Valid EstadoForm form, UriComponentsBuilder uriBuilder){
 		Optional<Estado> idDoEstadoExiste = estadoRepository.findById(id);
 		
 		if(idDoEstadoExiste.isPresent()) {
