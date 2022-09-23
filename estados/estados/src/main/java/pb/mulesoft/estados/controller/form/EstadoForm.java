@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import pb.mulesoft.estados.modelo.Estado;
 import pb.mulesoft.estados.modelo.Regiao;
+import pb.mulesoft.estados.repository.EstadoRepository;
 
 public class EstadoForm {
 	
@@ -63,6 +64,18 @@ public class EstadoForm {
 
 	public void setArea(BigDecimal area) {
 		this.area = area;
+	}
+
+	public Estado atualizar(Long id, EstadoRepository estadoRepository) {
+			Estado estado = estadoRepository.getOne(id);
+			
+			estado.setNome(this.nome);
+			estado.setRegiao(this.regiao);
+			estado.setPopulacao(this.populacao);
+			estado.setCapital(this.capital);
+			estado.setArea(this.area);
+			
+		return estado;
 	}
 
 }
