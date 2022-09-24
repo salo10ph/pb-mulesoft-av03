@@ -63,7 +63,7 @@ public class EstadosController {
 	
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<?> alterar(@PathVariable Long id, @RequestBody @Valid EstadoForm form, UriComponentsBuilder uriBuilder){
+	public ResponseEntity<?> alterar(@PathVariable Long id, @RequestBody @Valid EstadoForm form){
 		Optional<Estado> idDoEstadoExiste = estadoRepository.findById(id);
 		
 		if(idDoEstadoExiste.isPresent()) {
