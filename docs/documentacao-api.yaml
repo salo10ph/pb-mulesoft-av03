@@ -1,0 +1,226 @@
+openapi: 3.0.1
+info:
+  title: API de estados
+  description: API para controle de estados com autenticação.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+  description: API de Teste
+paths:
+  /api/v1/estados:
+    get:
+      summary: Recupera todos os estados
+      parameters: 
+      - name: regiao
+        in: query
+        schema:
+          type: string
+      - name: sort
+        in: query
+        schema:
+          type: string
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/estados"
+    post:
+      summary: Cria um novo estado
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/cad_estado"
+      responses:
+        201:
+          description: Estado criado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/estado"
+      security:
+      - auth: []
+  /api/v1/estados/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    get:
+      summary: Recupera um estado pelo ID
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/estado"
+        404:
+          description: Estado não encontrado
+    put:
+      summary: Altera um estado pelo ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/cad_estado"
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/estado"
+        404:
+          description: Estado não encontrado
+      security:
+      - auth: []
+    delete:
+      summary: Deleta um estado pelo ID
+      responses:
+        200:
+          description: Sucesso
+        404:
+          description: Estado não encontrado
+      security:
+      - auth: []
+  /api/v1/usuarios:
+    get:
+      summary: Recupera todos os usuarios
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/usuarios"
+    post:
+      summary: Cria um novo usuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/cad_usuario"
+      responses:
+        201:
+          description: Usuario criado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/usuario"
+  /api/v1/usuarios/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+    put:
+      summary: Altera um usuario pelo ID
+      requestBody:
+        content:
+          applicatio/json:
+            schema:
+              $ref: "#/components/schemas/cad_usuario"
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/usuario"
+        404:
+          description: Estado não encontrado
+  /api/v1/autenticacao:
+    post:
+      summary: Autentica um usuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                senha:
+                  type: string
+      responses:
+        200:
+          description: Token gerado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  tipo:
+                    type: string
+components:
+  schemas:
+    estado:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        regiao:
+          type: string
+        populacao:
+          type: integer
+        capital:
+          type: string
+        area:
+          type: number
+          format: decimal
+    estados:
+      type: array
+      items:
+        $ref: "#/components/schemas/estado"
+    cad_estado:
+      type: object
+      properties: 
+        nome:
+          type: string
+        regiao:
+          type: string
+        populacao:
+          type: integer
+        capital:
+          type: string
+        area:
+          type: number
+          format: decimal
+    usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome: 
+          type: string
+        email:
+          type: string
+        senha: 
+          type: string
+    usuarios:
+      type: array
+      items:
+        $ref: "#/components/schemas/usuario"
+    cad_usuario:
+      type: object
+      properties:
+        nome: 
+          type: string
+        email:
+          type: string
+        senha: 
+          type: string
+  securitySchemes:
+    auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
