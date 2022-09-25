@@ -19,12 +19,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import pb.mulesoft.estados.controller.dto.EstadoDto;
 import pb.mulesoft.estados.controller.form.EstadoForm;
 import pb.mulesoft.estados.modelo.Estado;
+import pb.mulesoft.estados.modelo.Regiao;
 import pb.mulesoft.estados.repository.EstadoRepository;
 
 @RestController
@@ -35,9 +37,14 @@ public class EstadosController {
 	private EstadoRepository estadoRepository;
 	
 	@GetMapping
-	public Page<EstadoDto> listar(@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 5) Pageable paginacao){
-		Page<Estado> estados = estadoRepository.findAll(paginacao);
-		return EstadoDto.converter(estados);
+	public Page<EstadoDto> listar(@RequestParam(required = false) Regiao regiao, @PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 5) Pageable paginacao){
+		if(regiao == null) {
+			Page<Estado> estados = estadoRepository.findAll(paginacao);
+			return EstadoDto.converter(estados);
+		} else {
+			Page<Estado> estados = estadoRepository.findByRegiao(regiao, paginacao);
+			return EstadoDto.converter(estados);
+		}
 	}
 	
 	@GetMapping("/{id}")
